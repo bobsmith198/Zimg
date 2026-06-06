@@ -1,0 +1,23 @@
+# ComfyUI extra model search paths for the Z-Image RunPod worker.
+# entrypoint.sh symlinks /runpod-volume/zimage/* into /ComfyUI/models/* at
+# runtime, so the standard paths below are sufficient for all model types.
+# The text_encoders entry under `clip` ensures CLIPLoader finds the Qwen encoder.
+comfyui:
+    base_path: /ComfyUI/
+    is_default: true
+    checkpoints: models/checkpoints/
+    clip: |
+        models/clip/
+        models/text_encoders/
+    clip_vision: models/clip_vision/
+    configs: models/configs/
+    controlnet: models/controlnet/
+    diffusion_models: |
+        models/diffusion_models/
+        models/unet/
+    embeddings: models/embeddings/
+    loras: |
+        models/loras/
+        /runpod-volume/zimage/loras/
+    upscale_models: models/upscale_models/
+    vae: models/vae/

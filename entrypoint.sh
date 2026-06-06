@@ -24,8 +24,13 @@ fetch () {  # $1=url  $2=dest
     echo "cached: $(basename "$2")"
   else
     echo "downloading $(basename "$2") …"
+    # S3 URI — fastest path now that models live in the network volume bucket.
+    # AWS creds come from the standard env vars (AWS_ACCESS_KEY_ID etc.) set
+    # on the RunPod endpoint.
+    if echo "$1" | grep -q "^s3://"; then
+      aws s3 cp "$1" "$2" ${S3_ENDPOINT:+--endpoint-url "${S3_ENDPOINT}"}
     # Civitai gated downloads: set CIVITAI_TOKEN to send an auth header.
-    if echo "$1" | grep -q "civitai" && [ -n "${CIVITAI_TOKEN:-}" ]; then
+    elif echo "$1" | grep -q "civitai" && [ -n "${CIVITAI_TOKEN:-}" ]; then
       wget --no-verbose --header "Authorization: Bearer ${CIVITAI_TOKEN}" \
            --user-agent "Mozilla/5.0 (compatible)" -O "$2" "$1"
     # HF gated/large files: set HF_TOKEN to send an auth header.

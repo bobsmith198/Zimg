@@ -12,21 +12,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # PyTorch (CUDA 12.4 wheels)
 RUN pip install --upgrade pip && \
-    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 
 # ComfyUI (pin a ref for reproducible builds; override with --build-arg COMFYUI_REF=...)
 ARG COMFYUI_REF=master
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git /ComfyUI && \
     cd /ComfyUI && git checkout ${COMFYUI_REF} && \
     pip install -r requirements.txt
-RUN pip install torch --index-url https://download.pytorch.org/whl/cu128
-# Worker runtime deps
-RUN pip install runpod websocket-client
+
+# Worker runtime deps (awscli for S3 model fetching in entrypoint.sh)
+RUN pip install runpod websocket-client awscli
 
 # Worker files
-COPY handler.py    /handler.py
-COPY workflow.json /workflow.json
-COPY entrypoint.sh /entrypoint.sh
+COPY handler.py              /handler.py
+COPY workflow.json             /workflow.json
+COPY extra_model_paths.yaml   /ComfyUI/extra_model_paths.yaml
+COPY entrypoint.sh            /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Model + io dirs (diffusion_models / text_encoders / vae / loras get symlinked

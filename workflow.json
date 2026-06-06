@@ -2,7 +2,7 @@
   "4": {
     "class_type": "UNETLoader",
     "inputs": {
-      "unet_name": "z_image_turbo_bf16.safetensors",
+      "unet_name": "perfeczion_10BF16.safetensors",
       "weight_dtype": "default"
     },
     "_meta": { "title": "Load Diffusion Model" }
@@ -20,7 +20,7 @@
     "class_type": "CLIPLoader",
     "inputs": {
       "clip_name": "qwen_3_4b.safetensors",
-      "type": "z_image"
+      "type": "lumina2"
     },
     "_meta": { "title": "Load Text Encoder" }
   },
