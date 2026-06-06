@@ -248,16 +248,16 @@ def handler(job):
     set_in(wf, nid_for(idx, "Negative Prompt"), text=inp.get("negative_prompt", ""))
     set_in(wf, nid_for(idx, "Empty Latent"), width=w, height=h, batch_size=1)
 
-    # Optional model-file / encoder-type overrides (handy when you stage variant
-    # weights on the volume, e.g. the fp8 diffusion model for lower VRAM)
-    if inp.get("ckpt_name"):
-        set_in(wf, nid_for(idx, "Load Diffusion Model"), unet_name=inp["ckpt_name"])
-    if inp.get("vae_name"):
-        set_in(wf, nid_for(idx, "Load VAE"), vae_name=inp["vae_name"])
-    if inp.get("clip_name"):
-        set_in(wf, nid_for(idx, "Load Text Encoder"), clip_name=inp["clip_name"])
-    if inp.get("clip_type"):
-        set_in(wf, nid_for(idx, "Load Text Encoder"), type=inp["clip_type"])
+    # Always patch model filenames and CLIP type so workflow.json defaults can
+    # never cause a validation mismatch.  Env vars mirror entrypoint.sh; job
+    # input takes priority over env vars, which take priority over literals.
+    set_in(wf, nid_for(idx, "Load Diffusion Model"),
+           unet_name=inp.get("ckpt_name") or os.getenv("ZIMAGE_DIFFUSION_FILE", "perfeczion_10BF16.safetensors"))
+    set_in(wf, nid_for(idx, "Load VAE"),
+           vae_name=inp.get("vae_name")   or os.getenv("ZIMAGE_VAE_FILE",       "ae.safetensors"))
+    set_in(wf, nid_for(idx, "Load Text Encoder"),
+           clip_name=inp.get("clip_name") or os.getenv("ZIMAGE_TEXTENC_FILE",   "qwen_3_4b.safetensors"),
+           type=inp.get("clip_type")      or os.getenv("ZIMAGE_CLIP_TYPE",      "lumina2"))
 
     # ── LoRA(s) ──────────────────────────────────────────────────
     lora_node = idx.get("LoRA Loader")  # optional node
