@@ -19,7 +19,7 @@ ARG COMFYUI_REF=master
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git /ComfyUI && \
     cd /ComfyUI && git checkout ${COMFYUI_REF} && \
     pip install -r requirements.txt
-
+RUN pip install torch --index-url https://download.pytorch.org/whl/cu128
 # Worker runtime deps
 RUN pip install runpod websocket-client
 
