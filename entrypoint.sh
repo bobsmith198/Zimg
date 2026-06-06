@@ -11,11 +11,11 @@ MODELS="$VOLUME/zimage"
 mkdir -p "$MODELS/diffusion_models" "$MODELS/text_encoders" "$MODELS/vae" "$MODELS/loras"
 
 # Model sources — override any of these via env vars without rebuilding the image.
-DIFF_URL="${ZIMAGE_DIFFUSION_URL:-https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors}"
+DIFF_URL="${ZIMAGE_DIFFUSION_URL:-https://civitai.red/api/download/models/2836778?fileId=2723038}"
 CLIP_URL="${ZIMAGE_TEXTENC_URL:-https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors}"
 VAE_URL="${ZIMAGE_VAE_URL:-https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors}"
 
-DIFF_FILE="${ZIMAGE_DIFFUSION_FILE:-z_image_turbo_bf16.safetensors}"
+DIFF_FILE="${ZIMAGE_DIFFUSION_FILE:-perfeczion_10BF16.safetensors}"
 CLIP_FILE="${ZIMAGE_TEXTENC_FILE:-qwen_3_4b.safetensors}"
 VAE_FILE="${ZIMAGE_VAE_FILE:-ae.safetensors}"
 
